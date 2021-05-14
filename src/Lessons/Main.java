@@ -40,8 +40,7 @@ public class Main {
         System.currentTimeMillis();
         long b = System.currentTimeMillis();
 
-        System.arraycopy(arr1, 0, a1, 0, h);
-        System.arraycopy(arr1, h, a2, 0, h);
+
 
         Thread thread1 = new Thread(() -> {
             for (int i = 0; i < a1.length; i++) {
@@ -50,17 +49,20 @@ public class Main {
         });
 
         Thread thread2 = new Thread(() -> {
+            System.arraycopy(arr1, 0, a1, 0, h);
+            System.arraycopy(arr1, h, a2, 0, h);
             for (int j = 0; j < a2.length; j++) {
                 a2[j] = (float)(a2[j] * Math.sin(0.2f + j / 5) * Math.cos(0.2f + j / 5) * Math.cos(0.4f + j / 2));
             }
+            System.arraycopy(a1, 0, arr1, 0, h);
+            System.arraycopy(a2, 0, arr1, h, h);
         });
 
         thread1.start();
         thread2.start();
 
 
-        System.arraycopy(a1, 0, arr1, 0, h);
-        System.arraycopy(a2, 0, arr1, h, h);
+
 
         thread1.join();
         thread2.join();
