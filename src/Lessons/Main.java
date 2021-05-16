@@ -2,7 +2,7 @@ package Lessons;
 
 import java.util.Arrays;
 
-public class Main {
+public class Main extends Thread{
     static final int size = 10000000;
     static final int h = size / 2;
 
@@ -41,31 +41,30 @@ public class Main {
         long b = System.currentTimeMillis();
 
 
-
         Thread thread1 = new Thread(() -> {
-            for (int i = 0; i < a1.length; i++) {
-                a1[i] = (float)(a1[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
+            System.arraycopy(arr1, 0, a1, 0, h);
+            for (int j = 0; j < a1.length; j++) {
+                a1[j] = (float)(a1[j] * Math.sin(0.2f + j / 5) * Math.cos(0.2f + j / 5) * Math.cos(0.4f + j / 2));
             }
+            System.arraycopy(a1, 0, arr1, 0, h);
+
         });
 
         Thread thread2 = new Thread(() -> {
-            System.arraycopy(arr1, 0, a1, 0, h);
+
             System.arraycopy(arr1, h, a2, 0, h);
             for (int j = 0; j < a2.length; j++) {
                 a2[j] = (float)(a2[j] * Math.sin(0.2f + j / 5) * Math.cos(0.2f + j / 5) * Math.cos(0.4f + j / 2));
             }
-            System.arraycopy(a1, 0, arr1, 0, h);
             System.arraycopy(a2, 0, arr1, h, h);
         });
 
         thread1.start();
         thread2.start();
-
-
-
-
         thread1.join();
         thread2.join();
+
+
 
         System.currentTimeMillis();
         System.out.println(System.currentTimeMillis() - b);
